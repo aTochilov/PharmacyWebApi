@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,12 +10,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace PharmacyApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class ManufacturersController : ControllerBase
     {
         private readonly PharmacyDbContext context;
@@ -67,7 +68,7 @@ namespace PharmacyApi.Controllers
             {
                 await context.Manufacturers.AddAsync(value);
                 await context.SaveChangesAsync();
-                return Ok();
+                return Ok("Saved");
             }
             catch (Exception)
             {
@@ -91,7 +92,7 @@ namespace PharmacyApi.Controllers
                 context.Manufacturers.Update(value);
 
                 await context.SaveChangesAsync();
-                return Ok();
+                return Ok("Saved");
             }
             catch (Exception)
             {
@@ -109,7 +110,7 @@ namespace PharmacyApi.Controllers
                 if (existingManuf == null) return NotFound();
                 context.Manufacturers.Remove(existingManuf);
                 await context.SaveChangesAsync();
-                return Ok();
+                return Ok("Removed");
             }
             catch (Exception)
             {

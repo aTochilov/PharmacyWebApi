@@ -7,12 +7,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Http;
-using System.Collections;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PharmacyApi.Controllers
 {
+
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class MedicinesController : ControllerBase
     {
         private readonly PharmacyDbContext context;
@@ -66,7 +68,7 @@ namespace PharmacyApi.Controllers
             {
                 await context.Medicines.AddAsync(value);
                 await context.SaveChangesAsync();
-                return Ok();
+                return Ok("Saved");
             }
             catch (Exception)
             {
@@ -90,7 +92,7 @@ namespace PharmacyApi.Controllers
                 context.Medicines.Update(value);
 
                 await context.SaveChangesAsync();
-                return Ok();
+                return Ok("Saved");
             }
             catch (Exception)
             {
@@ -108,7 +110,7 @@ namespace PharmacyApi.Controllers
                 if (existingMed == null) return NotFound();
                 context.Medicines.Remove(existingMed);
                 await context.SaveChangesAsync();
-                return Ok();
+                return Ok("Removed");
             }
             catch (Exception)
             {
