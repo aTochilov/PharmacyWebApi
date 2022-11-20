@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-
+using System;
 
 namespace PharmacyApi
 {
@@ -15,8 +15,7 @@ namespace PharmacyApi
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseKestrel();
-                    webBuilder.UseUrls("http://localhost:5000", "http://192.168.0.107:5001");
+                    webBuilder.UseIIS();
                     webBuilder.UseStartup<Startup>();
                 });
     }

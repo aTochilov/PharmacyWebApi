@@ -36,7 +36,7 @@ namespace PharmacyApi
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
             services.AddDbContext<PharmacyDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("PharmacyAzureConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("LocalConnection"))); //"PharmacyAzureConnection"
             services.AddScoped<AuthService>();
             services.AddSwaggerGen(c =>
             {

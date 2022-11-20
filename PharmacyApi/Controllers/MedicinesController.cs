@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace PharmacyApi.Controllers
 {
@@ -18,10 +19,12 @@ namespace PharmacyApi.Controllers
     public class MedicinesController : ControllerBase
     {
         private readonly PharmacyDbContext context;
+        private readonly ILogger<MedicinesController> logger;
 
-        public MedicinesController(PharmacyDbContext context)
+        public MedicinesController(PharmacyDbContext context, ILogger<MedicinesController> log)
         {
             this.context = context;
+            logger = log;
         }
 
 
@@ -31,13 +34,14 @@ namespace PharmacyApi.Controllers
             try
             {
                 var result = context.Medicines.ToArray();
-
+                logger.LogInformation($"Loaded {result.Count()} medicines");
                 if (result == null) return NotFound();
 
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError(ex.ToString());
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Error retrieving data from the database");
             }
@@ -51,7 +55,7 @@ namespace PharmacyApi.Controllers
                 var result = context.Medicines.Include(m => m.Manufacturer).FirstOrDefault(m => m.MedicineId == id);
 
                 if (result == null) return NotFound();
-
+                logger.LogInformation("Loaded medicine with id {medicineId}", result.MedicineId);
                 return result;
             }
             catch (Exception)
